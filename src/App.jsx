@@ -4,11 +4,12 @@ import ProductList from './components/ProductList'
 import Pagination from './components/Pagination'
 import './components/ecommerce.css'
 import { useState } from 'react'
+import mockProducts from "./data/products"
+
 
 function App() {
   const [search, setSearch] = useState("");
-
-
+  const [products, setProducts] = useState(mockProducts)
 
   return (
     <>
@@ -41,7 +42,7 @@ function App() {
 
         <section className="shop-content">
           <SearchBar search={search} setSearch={setSearch} />
-          <ProductList />
+          <ProductList products={products} />
           <Pagination />
         </section>
       </main>

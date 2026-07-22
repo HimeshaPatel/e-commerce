@@ -1,15 +1,11 @@
+
+
 import React from 'react'
 
 const SearchBar = ({ setSearch, search }) => {
     return (
         <div className="search-bar-container">
-            <select className="search-category-select" defaultValue="">
-                <option value="">All Categories</option>
-                <option value="electronics">Electronics</option>
-                <option value="accessories">Accessories</option>
-                <option value="wearables">Wearables</option>
-                <option value="gear">Gear</option>
-            </select>
+
             <div className="search-input-wrapper">
                 <svg
                     className="search-icon"
@@ -33,9 +29,7 @@ const SearchBar = ({ setSearch, search }) => {
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
-            <button className="search-button" type="button">
-                Search
-            </button>
+
         </div>
     )
 }
