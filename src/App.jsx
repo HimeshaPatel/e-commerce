@@ -6,10 +6,38 @@ import './components/ecommerce.css'
 import { useState } from 'react'
 import mockProducts from "./data/products"
 
+const PRODUCTS_PER_PAGE = 3;
+
 
 function App() {
   const [search, setSearch] = useState("");
-  const [products, setProducts] = useState(mockProducts)
+  const [products, setProducts] = useState(mockProducts);
+  const [category, setCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("")
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const searchValue = search.trim().toLowerCase();
+  const searchCategoryValue = category.trim().toLowerCase();
+
+  const filteredProducts = products.filter((product) => {
+    const matchSearchTerm =
+      product.title.toLowerCase().includes(searchValue) ||
+      product.category.toLowerCase().includes(searchValue);
+    const matchCategory =
+      category === "All" || product.category.toLowerCase() === searchCategoryValue;
+    return matchSearchTerm && matchCategory;
+  });
+
+  const totalProducts = products.length;
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+  const start = currentPage * PRODUCTS_PER_PAGE;
+  const end = start + PRODUCTS_PER_PAGE;
+
+
+  const paginationProducts = filteredProducts.slice(start, end);
+
+
+
 
   return (
     <>
@@ -38,12 +66,12 @@ function App() {
       </header>
 
       <main className="shop-container">
-        <Filters />
+        <Filters category={category} setCategory={setCategory} />
 
         <section className="shop-content">
           <SearchBar search={search} setSearch={setSearch} />
-          <ProductList products={products} />
-          <Pagination />
+          <ProductList products={paginationProducts} />
+          <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </section>
       </main>
 

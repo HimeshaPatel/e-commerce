@@ -1,21 +1,19 @@
 import React from 'react'
 
-const Filters = () => {
+const Filters = ({ category, setCategory }) => {
   return (
     <aside className="filters-sidebar">
       {/* Category Section */}
       <div>
         <h3 className="filter-section-title">Categories</h3>
         <div className="filter-category-list">
-          <select>
-            <option value="" disabled>Select Category</option>
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="All">All Products</option>
             <option value="Electronics">Electronics</option>
             <option value="Accessories">Accessories</option>
             <option value="Wearables">Wearables</option>
             <option value="Gear">Gear</option>
           </select>
-
         </div>
       </div>
 
