@@ -3,7 +3,7 @@ import Filters from './components/Filters'
 import ProductList from './components/ProductList'
 import Pagination from './components/Pagination'
 import './components/ecommerce.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import mockProducts from "./data/products"
 
 const PRODUCTS_PER_PAGE = 3;
@@ -15,6 +15,11 @@ function App() {
   const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("")
   const [currentPage, setCurrentPage] = useState(0);
+
+  // Reset to page 1 (index 0) whenever search, category, or sortBy changes
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [search, category, sortBy]);
 
   const searchValue = search.trim().toLowerCase();
   const searchCategoryValue = category.trim().toLowerCase();
@@ -28,14 +33,30 @@ function App() {
     return matchSearchTerm && matchCategory;
   });
 
-  const totalProducts = products.length;
+  const sortProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "low-high") {
+      return a.price - b.price;
+    }
+
+    if (sortBy === "high-low") {
+      return b.price - a.price;
+    }
+
+    if (sortBy === "a-z") {
+      return a.title.localeCompare(b.title);
+    }
+    if (sortBy === "z-a") {
+      return b.title.localeCompare(a.title);
+    }
+    return 0;
+  });
+
+  const totalProducts = sortProducts.length;
   const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
   const start = currentPage * PRODUCTS_PER_PAGE;
   const end = start + PRODUCTS_PER_PAGE;
 
-
-  const paginationProducts = filteredProducts.slice(start, end);
-
+  const paginationProducts = sortProducts.slice(start, end);
 
 
 
@@ -66,7 +87,7 @@ function App() {
       </header>
 
       <main className="shop-container">
-        <Filters category={category} setCategory={setCategory} />
+        <Filters category={category} setCategory={setCategory} sortBy={sortBy} setSortBy={setSortBy} />
 
         <section className="shop-content">
           <SearchBar search={search} setSearch={setSearch} />
